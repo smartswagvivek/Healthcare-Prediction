@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Health Assessment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #8e44ad;
+            --primary-dark: #732d91;
+            --secondary: #3498db;
+            --danger: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #d1c4e9, #b39ddb);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        .container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 700px; /* Increased width */
+            overflow: hidden;
+            animation: fadeInUp 0.6s ease-out;
+            position: relative;
+            padding: 20px;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .header img {
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        .form-container {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f9f9f9;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            background-color: white;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 12px;
+            color: var(--gray);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover {
+            background-color: #dfe6e9;
+        }
+
+        .result-container {
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .risk-low {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 5px solid var(--success);
+        }
+
+        .risk-moderate {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 5px solid var(--warning);
+        }
+
+        .risk-high {
+            background-color: rgba(231, 76, 60, 0.1);
+            border-left: 5px solid var(--danger);
+        }
+
+        .risk-title {
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .risk-description {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-heartbeat"></i> Diabetes Risk Assessment</h1>
+            <p>Evaluate your risk factors for diabetes mellitus</p>
+            <img src="https://www.wikihealthnews.com/wp-content/uploads/2022/04/Diabetes-Health-Screening-2.png" alt="Diabetes Health Screening">
+        </div>
+        
+        <div class="form-container">
+            <form id="diabetesForm">
+                <div class="form-group">
+                    <label for="age">Age <i class="fas fa-calendar-alt input-icon"></i></label>
+                    <input type="number" id="age" class="form-control" placeholder="Enter your age" min="18" max="120" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="weight">Weight (kg) <i class="fas fa-weight input-icon"></i></label>
+                    <input type="number" id="weight" class="form-control" placeholder="Enter your weight" min="30" max="300" step="0.1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="height">Height (cm) <i class="fas fa-ruler-vertical input-icon"></i></label>
+                    <input type="number" id="height" class="form-control" placeholder="Enter your height" min="100" max="250" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bloodPressure">Blood Pressure (mmHg) <i class="fas fa-heartbeat input-icon"></i></label>
+                    <input type="number" id="bloodPressure" class="form-control" placeholder="Enter systolic blood pressure" min="70" max="250" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="familyHistory">Family History of Diabetes <i class="fas fa-family input-icon"></i></label>
+                    <select id="familyHistory" class="form-control" required>
+                        <option value="">Select option</option>
+                        <option value="no">No family history</option>
+                        <option value="parent">One parent with diabetes</option>
+                        <option value="both">Both parents with diabetes</option>
+                        <option value="sibling">Sibling with diabetes</option>
+                    </select>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-chart-line"></i> Assess Risk
+                    </button>
+                    <button type="button" id="resetBtn" class="btn btn-secondary">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </form>
+            
+            <div id="result" class="result-container">
+                <div class="risk-title" id="riskTitle">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Risk Assessment Result</span>
+                </div>
+                <div class="risk-description" id="riskDescription"></div>
+                <div class="risk-advice" id="riskAdvice" style="margin-top: 15px; font-size: 0.9rem;"></div>
+            </div>
+            
+            <div class="footer">
+                <p>This assessment is for informational purposes only and not a substitute for professional medical advice.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('diabetesForm');
+            const resultContainer = document.getElementById('result');
+            const riskTitle = document.getElementById('riskTitle');
+            const riskDescription = document.getElementById('riskDescription');
+            const riskAdvice = document.getElementById('riskAdvice');
+            
+            // Form submission
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Get form values
+                const age = parseInt(document.getElementById('age').value);
+                const weight = parseFloat(document.getElementById('weight').value);
+                const height = parseFloat(document.getElementById('height').value);
+                const bloodPressure = parseInt(document.getElementById('bloodPressure').value);
+                const familyHistory = document.getElementById('familyHistory').value;
+                
+                // Risk assessment algorithm
+                let riskScore = 0;
+                let riskLevel = '';
+                let riskColor = '';
+                let recommendations = [];
+                
+                // Age factor
+                if (age >= 45) riskScore += 3;
+                else if (age >= 35) riskScore += 2;
+                else if (age >= 25) riskScore += 1;
+                
+                // BMI calculation
+                const bmi = (weight / Math.pow(height / 100, 2)).toFixed(1);
+                if (bmi >= 30) riskScore += 4;
+                else if (bmi >= 25) riskScore += 2;
+                else if (bmi < 18.5) riskScore += 0.5;
+                
+                // Blood pressure factor
+                if (bloodPressure >= 140) riskScore += 3;
+                else if (bloodPressure >= 130) riskScore += 2;
+                else if (bloodPressure >= 120) riskScore += 1;
+                
+                // Family history factor
+                if (familyHistory === 'both') riskScore += 4;
+                else if (familyHistory === 'parent') riskScore += 2;
+                else if (familyHistory === 'sibling') riskScore += 3;
+                
+                // Determine risk level
+                if (riskScore >= 8) {
+                    riskLevel = 'High Risk';
+                    riskColor = 'risk-high';
+                    recommendations = [
+                        "Consult with a healthcare provider immediately.",
+                        "Consider regular blood glucose monitoring.",
+                        "Adopt a healthy diet and exercise routine.",
+                        "Lose weight if overweight."
+                    ];
+                } else if (riskScore >= 5) {
+                    riskLevel = 'Moderate Risk';
+                    riskColor = 'risk-moderate';
+                    recommendations = [
+                        "Schedule a check-up with your doctor.",
+                        "Monitor your blood pressure regularly.",
+                        "Increase physical activity.",
+                        "Consider dietary changes."
+                    ];
+                } else {
+                    riskLevel = 'Low Risk';
+                    riskColor = 'risk-low';
+                    recommendations = [
+                        "Maintain healthy lifestyle habits.",
+                        "Get regular check-ups.",
+                        "Stay physically active.",
+                        "Monitor risk factors as you age."
+                    ];
+                }
+                
+                // Display results
+                resultContainer.className = `result-container ${riskColor}`;
+                resultContainer.style.display = 'block';
+                
+                riskTitle.innerHTML = `<i class="fas ${riskColor === 'risk-high' ? 'fa-exclamation-triangle' : 
+                                      riskColor === 'risk-moderate' ? 'fa-info-circle' : 'fa-check-circle'}"></i>
+                                      <span>${riskLevel} for Diabetes</span>`;
+                
+                riskDescription.innerHTML = 
+                    `<p>Based on your inputs, your diabetes risk assessment score is <strong>${riskScore}/12</strong>.</p>`;
+                
+                riskAdvice.innerHTML = 
+                    `<p><strong>Recommendations:</strong></p>
+                    <ul style="padding-left: 20px; margin-top: 5px;">
+                        ${recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                    </ul>`;
+                
+                // Scroll to results
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Reset form
+            document.getElementById('resetBtn').addEventListener('click', function() {
+                form.reset();
+                resultContainer.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
